@@ -1,7 +1,8 @@
 const path = require('path');
-const universal = require('./webpack.universal.js');
+const merge = require('webpack-merge');
+const universalConfig = require('./webpack.universal.js');
 
-module.exports = {
+const config = {
   // Tell webpack the root file of our server application.
   entry: './src/client',
 
@@ -10,7 +11,6 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
   },
-
-  // Universal webpack configuration
-  ...universal,
 };
+
+module.exports = merge(universalConfig, config);

@@ -1,7 +1,8 @@
 const path = require('path');
-const universal = require('./webpack.universal.js');
+const merge = require('webpack-merge');
+const universalConfig = require('./webpack.universal.js');
 
-module.exports = {
+const config = {
   // Inform webpack that we're bundling a bundle
   // for NodeJS, rather than for the browser.
   target: 'node',
@@ -14,7 +15,6 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-
-  // Universal webpack configuration
-  ...universal,
 };
+
+module.exports = merge(universalConfig, config);
