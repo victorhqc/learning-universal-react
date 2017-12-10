@@ -1,8 +1,0 @@
-"extends": "airbnb"
-"env":
-  "node": true
-  "browser": true
-  "commonjs": true
-  "shared-node-browser": true
-"rules":
-  "react/jsx-filename-extension": 0
