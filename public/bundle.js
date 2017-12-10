@@ -11298,7 +11298,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Startup point for the client side application
 
-var store = (0, _createStore2.default)();
+var store = (0, _createStore2.default)(window.INITIAL_STATE);
 
 _reactDom2.default.hydrate(_react2.default.createElement(
   _reactRedux.Provider,
@@ -44149,6 +44149,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _users = __webpack_require__(267);
 
+var _users2 = __webpack_require__(700);
+
+var _users3 = _interopRequireDefault(_users2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -44166,27 +44170,45 @@ var fetchusersFulfilled = function fetchusersFulfilled(data) {
   };
 };
 
+var isFetchRequired = function isFetchRequired(state, force) {
+  if (force) {
+    return true;
+  }
+
+  return (0, _users3.default)(state).length <= 0;
+};
+
 var fetchUsers = function fetchUsers() {
+  var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
       var _ref2, data;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (isFetchRequired(getState(), force)) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt('return');
+
+            case 2:
+
               dispatch(fetchUsersPending());
-              _context.next = 3;
+              _context.next = 5;
               return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
 
-            case 3:
+            case 5:
               _ref2 = _context.sent;
               data = _ref2.data;
 
 
               dispatch(fetchusersFulfilled(data));
 
-            case 6:
+            case 8:
             case 'end':
               return _context.stop();
           }
@@ -44194,7 +44216,7 @@ var fetchUsers = function fetchUsers() {
       }, _callee, undefined);
     }));
 
-    return function (_x) {
+    return function (_x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -45257,6 +45279,22 @@ exports.default = {
   loadData: loadData,
   component: (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersListPage)
 };
+
+/***/ }),
+/* 700 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var selectUsers = function selectUsers(state) {
+  return state.users.list;
+};
+
+exports.default = selectUsers;
 
 /***/ })
 /******/ ]);

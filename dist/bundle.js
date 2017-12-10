@@ -180,6 +180,10 @@ var _reactRouterConfig = __webpack_require__(10);
 
 var _reactRedux = __webpack_require__(1);
 
+var _serializeJavascript = __webpack_require__(28);
+
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
 var _Routes = __webpack_require__(11);
 
 var _Routes2 = _interopRequireDefault(_Routes);
@@ -204,7 +208,9 @@ exports.default = function (_ref) {
     )
   ));
 
-  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
+  var initialState = (0, _serializeJavascript2.default)(store.getState());
+
+  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + initialState + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
 };
 
 /***/ }),
@@ -286,6 +292,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _users = __webpack_require__(2);
 
+var _users2 = __webpack_require__(27);
+
+var _users3 = _interopRequireDefault(_users2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -303,27 +313,45 @@ var fetchusersFulfilled = function fetchusersFulfilled(data) {
   };
 };
 
+var isFetchRequired = function isFetchRequired(state, force) {
+  if (force) {
+    return true;
+  }
+
+  return (0, _users3.default)(state).length <= 0;
+};
+
 var fetchUsers = function fetchUsers() {
+  var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
       var _ref2, data;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (isFetchRequired(getState(), force)) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt('return');
+
+            case 2:
+
               dispatch(fetchUsersPending());
-              _context.next = 3;
+              _context.next = 5;
               return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
 
-            case 3:
+            case 5:
               _ref2 = _context.sent;
               data = _ref2.data;
 
 
               dispatch(fetchusersFulfilled(data));
 
-            case 6:
+            case 8:
             case 'end':
               return _context.stop();
           }
@@ -331,7 +359,7 @@ var fetchUsers = function fetchUsers() {
       }, _callee, undefined);
     }));
 
-    return function (_x) {
+    return function (_x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -648,6 +676,28 @@ exports.default = {
   loadData: loadData,
   component: (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersListPage)
 };
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var selectUsers = function selectUsers(state) {
+  return state.users.list;
+};
+
+exports.default = selectUsers;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
 
 /***/ })
 /******/ ]);

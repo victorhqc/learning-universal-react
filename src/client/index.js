@@ -9,7 +9,7 @@ import { renderRoutes } from 'react-router-config';
 import createStore from '../store/createStore.client';
 import Routes from './Routes';
 
-const store = createStore();
+const store = createStore(window.INITIAL_STATE);
 
 ReactDOM.hydrate(
   (
