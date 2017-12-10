@@ -10,16 +10,16 @@ const fetchUsersPending = () => ({
   type: FETCH_USERS_PENDING,
 });
 
-const fetchusersFulfilled = response => ({
+const fetchusersFulfilled = data => ({
   type: FETCH_USERS_FULFILLED,
-  payload: response,
+  payload: data,
 });
 
 const fetchUsers = () => async (dispatch) => {
   dispatch(fetchUsersPending());
-  const response = await axios.get('http://react-ssr-api.herokuapp.com/users');
+  const { data } = await axios.get('http://react-ssr-api.herokuapp.com/users');
 
-  dispatch(fetchusersFulfilled(response));
+  dispatch(fetchusersFulfilled(data));
 };
 
 export default fetchUsers;

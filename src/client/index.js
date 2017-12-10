@@ -1,9 +1,11 @@
 // Startup point for the client side application
 
-import React from 'react';
+import 'babel-polyfill';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
 import createStore from '../store/createStore.client';
 import Routes from './Routes';
 
@@ -13,7 +15,7 @@ ReactDOM.hydrate(
   (
     <Provider store={store}>
       <BrowserRouter>
-        <Routes />
+        <Fragment>{renderRoutes(Routes)}</Fragment>
       </BrowserRouter>
     </Provider>
   ),

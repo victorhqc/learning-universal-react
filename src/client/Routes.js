@@ -1,9 +1,14 @@
-import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
-import Home from './components/Home';
+import HomePage from './pages/HomePage';
+import UsersListPage from './pages/UsersListPage';
 
-export default () => (
-  <Fragment>
-    <Route exact path="/" component={Home} />
-  </Fragment>
-);
+export default [
+  {
+    ...HomePage,
+    path: '/',
+    exact: true,
+  },
+  {
+    ...UsersListPage,
+    path: '/users',
+  },
+];
