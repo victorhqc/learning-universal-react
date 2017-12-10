@@ -102,11 +102,17 @@ module.exports = require("redux");
 "use strict";
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 __webpack_require__(5);
 
 var _express = __webpack_require__(6);
 
 var _express2 = _interopRequireDefault(_express);
+
+var _expressHttpProxy = __webpack_require__(29);
+
+var _expressHttpProxy2 = _interopRequireDefault(_expressHttpProxy);
 
 var _reactRouterConfig = __webpack_require__(10);
 
@@ -126,10 +132,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = (0, _express2.default)();
 
+app.use('/api', (0, _expressHttpProxy2.default)('http://react-ssr-api.herokuapp.com', {
+  proxyReqOptDecorator: function proxyReqOptDecorator(opts) {
+    return _extends({}, opts, {
+      headers: _extends({}, opts.headers, {
+        'x-forwarded-host': 'localhost:3000'
+      })
+    });
+  }
+}));
+
 app.use(_express2.default.static('public'));
 
 app.get('*', function (req, res) {
-  var store = (0, _createStore2.default)();
+  var store = (0, _createStore2.default)({}, req);
 
   var promises = (0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
     var route = _ref.route;
@@ -286,10 +302,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _axios = __webpack_require__(17);
-
-var _axios2 = _interopRequireDefault(_axios);
-
 var _users = __webpack_require__(2);
 
 var _users2 = __webpack_require__(27);
@@ -324,7 +336,7 @@ var isFetchRequired = function isFetchRequired(state, force) {
 var fetchUsers = function fetchUsers() {
   var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState, api) {
       var _ref2, data;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -342,7 +354,7 @@ var fetchUsers = function fetchUsers() {
 
               dispatch(fetchUsersPending());
               _context.next = 5;
-              return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
+              return api.get('/users');
 
             case 5:
               _ref2 = _context.sent;
@@ -359,7 +371,7 @@ var fetchUsers = function fetchUsers() {
       }, _callee, undefined);
     }));
 
-    return function (_x2, _x3) {
+    return function (_x2, _x3, _x4) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -386,6 +398,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(3);
 
+var _axios = __webpack_require__(17);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _reduxThunk = __webpack_require__(19);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
@@ -396,14 +412,20 @@ var _reducers2 = _interopRequireDefault(_reducers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var enhancer = function enhancer() {
-  return (0, _redux.applyMiddleware)(_reduxThunk2.default);
+var enhancer = function enhancer(req) {
+  var axiosInstance = _axios2.default.create({
+    baseURL: 'http://react-ssr-api.herokuapp.com',
+    headers: { cookie: req.get('cookie') || '' }
+  });
+
+  return (0, _redux.applyMiddleware)(_reduxThunk2.default.withExtraArgument(axiosInstance));
 };
 
 exports.default = function () {
   var initialStore = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var req = arguments[1];
 
-  var store = (0, _redux.createStore)(_reducers2.default, initialStore, enhancer());
+  var store = (0, _redux.createStore)(_reducers2.default, initialStore, enhancer(req));
 
   return store;
 };
@@ -698,6 +720,12 @@ exports.default = selectUsers;
 /***/ (function(module, exports) {
 
 module.exports = require("serialize-javascript");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-http-proxy");
 
 /***/ })
 /******/ ]);

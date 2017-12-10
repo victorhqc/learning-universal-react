@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {
   FETCH_USERS_PENDING,
   FETCH_USERS_FULFILLED,
@@ -25,13 +23,13 @@ const isFetchRequired = (state, force) => {
   return selectUsers(state).length <= 0;
 };
 
-const fetchUsers = (force = false) => async (dispatch, getState) => {
+const fetchUsers = (force = false) => async (dispatch, getState, api) => {
   if (!isFetchRequired(getState(), force)) {
     return;
   }
 
   dispatch(fetchUsersPending());
-  const { data } = await axios.get('http://react-ssr-api.herokuapp.com/users');
+  const { data } = await api.get('/users');
 
   dispatch(fetchusersFulfilled(data));
 };

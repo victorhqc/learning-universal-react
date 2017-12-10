@@ -38734,6 +38734,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(133);
 
+var _axios = __webpack_require__(677);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _reduxThunk = __webpack_require__(544);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
@@ -38744,8 +38748,12 @@ var _reducers2 = _interopRequireDefault(_reducers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var axiosInstance = _axios2.default.create({
+  baseURL: '/api'
+});
+
 var enhancer = function enhancer() {
-  return (0, _redux.applyMiddleware)(_reduxThunk2.default);
+  return (0, _redux.applyMiddleware)(_reduxThunk2.default.withExtraArgument(axiosInstance));
 };
 
 exports.default = function () {
@@ -44143,10 +44151,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _axios = __webpack_require__(677);
-
-var _axios2 = _interopRequireDefault(_axios);
-
 var _users = __webpack_require__(267);
 
 var _users2 = __webpack_require__(700);
@@ -44181,7 +44185,7 @@ var isFetchRequired = function isFetchRequired(state, force) {
 var fetchUsers = function fetchUsers() {
   var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState, api) {
       var _ref2, data;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -44199,7 +44203,7 @@ var fetchUsers = function fetchUsers() {
 
               dispatch(fetchUsersPending());
               _context.next = 5;
-              return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
+              return api.get('/users');
 
             case 5:
               _ref2 = _context.sent;
@@ -44216,7 +44220,7 @@ var fetchUsers = function fetchUsers() {
       }, _callee, undefined);
     }));
 
-    return function (_x2, _x3) {
+    return function (_x2, _x3, _x4) {
       return _ref.apply(this, arguments);
     };
   }();
