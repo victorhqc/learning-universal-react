@@ -6,25 +6,15 @@ import {
   // FETCH_USERS_FAILED
 } from '../constants/users';
 
-const merge = nextState => state => ({
-  ...state,
-  ...nextState,
-});
-
-const isFulfilled = state => ({
-  ...state,
-  isFetching: false,
-});
-
-const isFetching = state => ({
-  ...state,
-  isFetching: true,
-});
+import {
+  merge,
+  isFulfilled,
+  isFetching,
+} from '../../helpers/object';
 
 const defaultState = () => ({
   list: [],
 });
-
 
 const users = (state = defaultState(), action = {}) => {
   switch (action.type) {
