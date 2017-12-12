@@ -1,12 +1,16 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 
-const onClick = () => console.log('Hi there');
+const HomePageWrapper = styled.div`
+  margin-top: 200px;
+  text-align: center;
+`;
 
 const HomePage = () => (
-  <Fragment>
-    <div>{'I\'m the home component'}</div>
-    <button onClick={onClick}>Press me!</button>
-  </Fragment>
+  <HomePageWrapper>
+    <h1>Welcome</h1>
+    <p>Check out these awesome features</p>
+  </HomePageWrapper>
 );
 
 export default {
