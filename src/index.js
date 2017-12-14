@@ -29,7 +29,14 @@ app.get('*', (req, res) => {
     .map(({ route }) => route.loadData && route.loadData(store));
 
   Promise.all(promises).then(() => {
-    res.send(renderer({ req, store }));
+    const context = {};
+    const content = renderer({ req, store, context });
+
+    if (context.NotFound) {
+      res.status(404);
+    }
+
+    res.send(content);
   });
 });
 
