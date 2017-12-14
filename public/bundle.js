@@ -49819,6 +49819,8 @@ var _propTypes = __webpack_require__(11);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _redux = __webpack_require__(134);
+
 var _reactRedux = __webpack_require__(132);
 
 var _map = __webpack_require__(701);
@@ -49828,6 +49830,10 @@ var _map2 = _interopRequireDefault(_map);
 var _admins = __webpack_require__(714);
 
 var _admins2 = _interopRequireDefault(_admins);
+
+var _withAuth = __webpack_require__(715);
+
+var _withAuth2 = _interopRequireDefault(_withAuth);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49922,7 +49928,7 @@ var loadData = function loadData(_ref2) {
 
 exports.default = {
   loadData: loadData,
-  component: (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersListPage)
+  component: (0, _redux.compose)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), _withAuth2.default)(UsersListPage)
 };
 
 /***/ }),
@@ -50008,6 +50014,70 @@ var fetchAdmins = function fetchAdmins() {
 };
 
 exports.default = fetchAdmins;
+
+/***/ }),
+/* 715 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(11);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(132);
+
+var _reactRouterDom = __webpack_require__(203);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var withAuth = function withAuth(WrappedComponent) {
+  var RequireAuth = function RequireAuth(props) {
+    var auth = props.auth;
+
+
+    if (auth.isFetching) {
+      return _react2.default.createElement(
+        'div',
+        null,
+        'Loading...'
+      );
+    }
+
+    if (!auth.isAuthenticated) {
+      return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/' });
+    }
+
+    return _react2.default.createElement(WrappedComponent, props);
+  };
+
+  RequireAuth.propTypes = {
+    auth: _propTypes2.default.shape({
+      isAuthenticated: _propTypes2.default.bool,
+      isFetching: _propTypes2.default.bool
+    }).isRequired
+  };
+
+  var mapStateToProps = function mapStateToProps(_ref) {
+    var auth = _ref.auth;
+    return {
+      auth: auth
+    };
+  };
+
+  return (0, _reactRedux.connect)(mapStateToProps)(RequireAuth);
+};
+
+exports.default = withAuth;
 
 /***/ })
 /******/ ]);

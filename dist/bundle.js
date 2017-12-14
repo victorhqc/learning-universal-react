@@ -270,11 +270,24 @@ app.get('*', function (req, res) {
   var promises = (0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
     var route = _ref.route;
     return route.loadData && route.loadData(store);
+  }).map(function (promise) {
+    if (!promise) {
+      return null;
+    }
+
+    return new Promise(function (resolve) {
+      promise.then(resolve).catch(resolve);
+    });
   });
 
   Promise.all(promises).then(function () {
     var context = {};
     var content = (0, _renderer2.default)({ req: req, store: store, context: context });
+
+    if (context.url) {
+      res.redirect(301, context.url);
+      return;
+    }
 
     if (context.NotFound) {
       res.status(404);
@@ -1231,6 +1244,8 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _redux = __webpack_require__(9);
+
 var _reactRedux = __webpack_require__(4);
 
 var _map = __webpack_require__(21);
@@ -1240,6 +1255,10 @@ var _map2 = _interopRequireDefault(_map);
 var _admins = __webpack_require__(37);
 
 var _admins2 = _interopRequireDefault(_admins);
+
+var _withAuth = __webpack_require__(38);
+
+var _withAuth2 = _interopRequireDefault(_withAuth);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1334,7 +1353,7 @@ var loadData = function loadData(_ref2) {
 
 exports.default = {
   loadData: loadData,
-  component: (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersListPage)
+  component: (0, _redux.compose)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), _withAuth2.default)(UsersListPage)
 };
 
 /***/ }),
@@ -1420,6 +1439,70 @@ var fetchAdmins = function fetchAdmins() {
 };
 
 exports.default = fetchAdmins;
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(4);
+
+var _reactRouterDom = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var withAuth = function withAuth(WrappedComponent) {
+  var RequireAuth = function RequireAuth(props) {
+    var auth = props.auth;
+
+
+    if (auth.isFetching) {
+      return _react2.default.createElement(
+        'div',
+        null,
+        'Loading...'
+      );
+    }
+
+    if (!auth.isAuthenticated) {
+      return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/' });
+    }
+
+    return _react2.default.createElement(WrappedComponent, props);
+  };
+
+  RequireAuth.propTypes = {
+    auth: _propTypes2.default.shape({
+      isAuthenticated: _propTypes2.default.bool,
+      isFetching: _propTypes2.default.bool
+    }).isRequired
+  };
+
+  var mapStateToProps = function mapStateToProps(_ref) {
+    var auth = _ref.auth;
+    return {
+      auth: auth
+    };
+  };
+
+  return (0, _reactRedux.connect)(mapStateToProps)(RequireAuth);
+};
+
+exports.default = withAuth;
 
 /***/ })
 /******/ ]);

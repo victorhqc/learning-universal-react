@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import map from 'lodash/map';
 import fetchAdmins from '../../store/actions/admins';
+import withAuth from '../components/hocs/withAuth';
 
 class UsersListPage extends Component {
   componentDidMount() {
@@ -57,5 +59,8 @@ const loadData = ({ dispatch }) => dispatch(fetchAdmins());
 
 export default {
   loadData,
-  component: connect(mapStateToProps, mapDispatchToProps)(UsersListPage),
+  component: compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuth,
+  )(UsersListPage),
 };

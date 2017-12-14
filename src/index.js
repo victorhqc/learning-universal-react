@@ -26,11 +26,25 @@ app.get('*', (req, res) => {
   const store = createStore({}, req);
 
   const promises = matchRoutes(Routes, req.path)
-    .map(({ route }) => route.loadData && route.loadData(store));
+    .map(({ route }) => route.loadData && route.loadData(store))
+    .map((promise) => {
+      if (!promise) {
+        return null;
+      }
+
+      return new Promise((resolve) => {
+        promise.then(resolve).catch(resolve);
+      });
+    });
 
   Promise.all(promises).then(() => {
     const context = {};
     const content = renderer({ req, store, context });
+
+    if (context.url) {
+      res.redirect(301, context.url);
+      return;
+    }
 
     if (context.NotFound) {
       res.status(404);
