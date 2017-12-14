@@ -846,19 +846,23 @@ exports.default = function (_ref) {
 
   var sheet = new _styledComponents.ServerStyleSheet();
 
-  var content = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
+  var content = (0, _server.renderToString)(_react2.default.createElement(
+    _styledComponents.StyleSheetManager,
+    { sheet: sheet.instance },
     _react2.default.createElement(
-      _reactRouterDom.StaticRouter,
-      { location: req.path, context: context },
+      _reactRedux.Provider,
+      { store: store },
       _react2.default.createElement(
-        _react.Fragment,
-        null,
-        (0, _reactRouterConfig.renderRoutes)(_Routes2.default)
+        _reactRouterDom.StaticRouter,
+        { location: req.path, context: context },
+        _react2.default.createElement(
+          _react.Fragment,
+          null,
+          (0, _reactRouterConfig.renderRoutes)(_Routes2.default)
+        )
       )
     )
-  )));
+  ));
   var styleTags = sheet.getStyleTags();
 
   var initialState = (0, _serializeJavascript2.default)(store.getState());

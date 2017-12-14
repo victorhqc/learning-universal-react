@@ -3,20 +3,22 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import { ServerStyleSheet } from 'styled-components';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import serialize from 'serialize-javascript';
 import Routes from '../client/Routes';
 
 export default ({ req, store, context }) => {
   const sheet = new ServerStyleSheet();
 
-  const content = renderToString(sheet.collectStyles((
-    <Provider store={store}>
-      <StaticRouter location={req.path} context={context}>
-        <Fragment>{renderRoutes(Routes)}</Fragment>
-      </StaticRouter>
-    </Provider>
-  )));
+  const content = renderToString((
+    <StyleSheetManager sheet={sheet.instance}>
+      <Provider store={store}>
+        <StaticRouter location={req.path} context={context}>
+          <Fragment>{renderRoutes(Routes)}</Fragment>
+        </StaticRouter>
+      </Provider>
+    </StyleSheetManager>
+  ));
   const styleTags = sheet.getStyleTags();
 
   const initialState = serialize(store.getState());
