@@ -4,7 +4,9 @@ import {
   // FETCH_USERS_FAILED
 } from '../constants/users';
 
-import selectUsers from '../selectors/users';
+import {
+  selectUsers,
+} from '../reducers/users';
 
 const fetchUsersPending = () => ({
   type: FETCH_USERS_PENDING,

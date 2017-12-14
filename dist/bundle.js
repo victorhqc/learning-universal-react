@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -85,10 +85,16 @@ module.exports = require("prop-types");
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-redux");
+module.exports = require("styled-components");
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100,7 +106,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _App = __webpack_require__(15);
+var _App = __webpack_require__(16);
 
 var _App2 = _interopRequireDefault(_App);
 
@@ -112,6 +118,10 @@ var _UsersListPage = __webpack_require__(20);
 
 var _UsersListPage2 = _interopRequireDefault(_UsersListPage);
 
+var _NotFoundPage = __webpack_require__(33);
+
+var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = [_extends({}, _App2.default, {
@@ -120,17 +130,17 @@ exports.default = [_extends({}, _App2.default, {
     exact: true
   }), _extends({}, _UsersListPage2.default, {
     path: '/users'
-  })]
+  }), _extends({}, _NotFoundPage2.default)]
 })];
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-router-dom");
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -143,7 +153,7 @@ var FETCH_CURRENT_USER_PENDING = exports.FETCH_CURRENT_USER_PENDING = 'FETCH_CUR
 var FETCH_CURRENT_USER_FULFILLED = exports.FETCH_CURRENT_USER_FULFILLED = 'FETCH_CURRENT_USER_FULFILLED';
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -154,22 +164,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 var FETCH_USERS_PENDING = exports.FETCH_USERS_PENDING = 'FETCH_USERS_PENDING';
 var FETCH_USERS_FULFILLED = exports.FETCH_USERS_FULFILLED = 'FETCH_USERS_FULFILLED';
-var FETCH_USERS_FAILED = exports.FETCH_USERS_FAILED = 'FETCH_USERA_FAILED';
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require("redux");
+var FETCH_USERS_FAILED = exports.FETCH_USERS_FAILED = 'FETCH_USERS_FAILED';
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/fp/compose");
+module.exports = require("redux");
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/fp/compose");
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -200,7 +210,7 @@ var isFetching = exports.isFetching = function isFetching(state) {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -208,19 +218,19 @@ var isFetching = exports.isFetching = function isFetching(state) {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-__webpack_require__(12);
+__webpack_require__(13);
 
-var _express = __webpack_require__(13);
+var _express = __webpack_require__(14);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _expressHttpProxy = __webpack_require__(14);
+var _expressHttpProxy = __webpack_require__(15);
 
 var _expressHttpProxy2 = _interopRequireDefault(_expressHttpProxy);
 
 var _reactRouterConfig = __webpack_require__(1);
 
-var _Routes = __webpack_require__(4);
+var _Routes = __webpack_require__(5);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
@@ -257,7 +267,14 @@ app.get('*', function (req, res) {
   });
 
   Promise.all(promises).then(function () {
-    res.send((0, _renderer2.default)({ req: req, store: store }));
+    var context = {};
+    var content = (0, _renderer2.default)({ req: req, store: store, context: context });
+
+    if (context.NotFound) {
+      res.status(404);
+    }
+
+    res.send(content);
   });
 });
 
@@ -266,25 +283,25 @@ app.listen(3000, function () {
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill");
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-http-proxy");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -304,13 +321,13 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _styledComponents = __webpack_require__(17);
+var _styledComponents = __webpack_require__(3);
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
 var _reactRouterConfig = __webpack_require__(1);
 
-var _Header = __webpack_require__(16);
+var _Header = __webpack_require__(17);
 
 var _Header2 = _interopRequireDefault(_Header);
 
@@ -349,7 +366,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -371,13 +388,13 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _styledComponents = __webpack_require__(17);
+var _styledComponents = __webpack_require__(3);
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
-var _reactRedux = __webpack_require__(3);
+var _reactRedux = __webpack_require__(4);
 
-var _reactRouterDom = __webpack_require__(5);
+var _reactRouterDom = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -456,12 +473,6 @@ var mapStateToProps = function mapStateToProps(_ref2) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Header);
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = require("styled-components");
-
-/***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -472,7 +483,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _auth = __webpack_require__(6);
+var _auth = __webpack_require__(7);
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -542,7 +553,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _styledComponents = __webpack_require__(17);
+var _styledComponents = __webpack_require__(3);
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
@@ -594,7 +605,7 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(3);
+var _reactRedux = __webpack_require__(4);
 
 var _map = __webpack_require__(21);
 
@@ -712,13 +723,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _users = __webpack_require__(7);
+var _users = __webpack_require__(8);
 
-var _users2 = __webpack_require__(23);
-
-var _users3 = _interopRequireDefault(_users2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _users2 = __webpack_require__(31);
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -740,7 +747,7 @@ var isFetchRequired = function isFetchRequired(state, force) {
     return true;
   }
 
-  return (0, _users3.default)(state).length <= 0;
+  return (0, _users2.selectUsers)(state).length <= 0;
 };
 
 var fetchUsers = function fetchUsers() {
@@ -790,22 +797,7 @@ var fetchUsers = function fetchUsers() {
 exports.default = fetchUsers;
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var selectUsers = function selectUsers(state) {
-  return state.users.list;
-};
-
-exports.default = selectUsers;
-
-/***/ }),
+/* 23 */,
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -822,17 +814,17 @@ var _react2 = _interopRequireDefault(_react);
 
 var _server = __webpack_require__(25);
 
-var _reactRouterDom = __webpack_require__(5);
+var _reactRouterDom = __webpack_require__(6);
 
 var _reactRouterConfig = __webpack_require__(1);
 
-var _reactRedux = __webpack_require__(3);
+var _reactRedux = __webpack_require__(4);
 
 var _serializeJavascript = __webpack_require__(26);
 
 var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
 
-var _Routes = __webpack_require__(4);
+var _Routes = __webpack_require__(5);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
@@ -840,14 +832,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = function (_ref) {
   var req = _ref.req,
-      store = _ref.store;
+      store = _ref.store,
+      context = _ref.context;
 
   var content = (0, _server.renderToString)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
     _react2.default.createElement(
       _reactRouterDom.StaticRouter,
-      { location: req.path, context: {} },
+      { location: req.path, context: context },
       _react2.default.createElement(
         _react.Fragment,
         null,
@@ -884,7 +877,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _redux = __webpack_require__(8);
+var _redux = __webpack_require__(9);
 
 var _axios = __webpack_require__(28);
 
@@ -941,11 +934,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _redux = __webpack_require__(8);
+var _redux = __webpack_require__(9);
 
 var _users = __webpack_require__(31);
 
 var _users2 = _interopRequireDefault(_users);
+
+var _admins = __webpack_require__(34);
+
+var _admins2 = _interopRequireDefault(_admins);
 
 var _auth = __webpack_require__(32);
 
@@ -955,6 +952,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = (0, _redux.combineReducers)({
   users: _users2.default,
+  admins: _admins2.default,
   auth: _auth2.default
 });
 
@@ -968,14 +966,15 @@ exports.default = (0, _redux.combineReducers)({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.selectUsers = undefined;
 
-var _compose = __webpack_require__(9);
+var _compose = __webpack_require__(10);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _users = __webpack_require__(7);
+var _users = __webpack_require__(8);
 
-var _object = __webpack_require__(10);
+var _object = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1007,6 +1006,9 @@ var users = function users() {
 };
 
 exports.default = users;
+var selectUsers = exports.selectUsers = function selectUsers(state) {
+  return state.users.list;
+};
 
 /***/ }),
 /* 32 */
@@ -1021,13 +1023,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _compose = __webpack_require__(9);
+var _compose = __webpack_require__(10);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _auth = __webpack_require__(6);
+var _auth = __webpack_require__(7);
 
-var _object = __webpack_require__(10);
+var _object = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1076,6 +1078,121 @@ var authReducer = function authReducer() {
 };
 
 exports.default = authReducer;
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint no-param-reassign: 0 */
+
+var NotFoundPage = function NotFoundPage(_ref) {
+  var staticContext = _ref.staticContext;
+
+  staticContext.NotFound = true;
+
+  return _react2.default.createElement(
+    'h1',
+    null,
+    'Oops, route not found.'
+  );
+};
+
+NotFoundPage.defaultProps = {
+  staticContext: {}
+};
+
+NotFoundPage.propTypes = {
+  staticContext: _propTypes2.default.shape({})
+};
+
+exports.default = {
+  component: NotFoundPage
+};
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.selectUsers = undefined;
+
+var _compose = __webpack_require__(10);
+
+var _compose2 = _interopRequireDefault(_compose);
+
+var _admins = __webpack_require__(35);
+
+var _object = __webpack_require__(11);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = function defaultState() {
+  return {
+    list: []
+  };
+};
+
+var admins = function admins() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState();
+  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  switch (action.type) {
+    case _admins.FETCH_ADMINS_PENDING:
+      // Set isFetching as true
+      return (0, _object.isFetching)(state);
+
+    case _admins.FETCH_ADMINS_FULFILLED:
+      return (0, _compose2.default)(
+      // Merge payload to state
+      (0, _object.merge)({ list: action.payload }),
+      // 1. Set isFetching as false
+      _object.isFulfilled)(state);
+
+    default:
+      return state;
+  }
+};
+
+exports.default = admins;
+var selectUsers = exports.selectUsers = function selectUsers(state) {
+  return state.admins.list;
+};
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var FETCH_ADMINS_PENDING = exports.FETCH_ADMINS_PENDING = 'FETCH_ADMINS_PENDING';
+var FETCH_ADMINS_FULFILLED = exports.FETCH_ADMINS_FULFILLED = 'FETCH_ADMINS_FULFILLED';
+var FETCH_ADMINS_FAILED = exports.FETCH_ADMINS_FAILED = 'FETCH_ADMINS_FAILED';
 
 /***/ })
 /******/ ]);

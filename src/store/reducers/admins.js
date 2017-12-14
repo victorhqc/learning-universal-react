@@ -1,10 +1,10 @@
 import compose from 'lodash/fp/compose';
 
 import {
-  FETCH_USERS_PENDING,
-  FETCH_USERS_FULFILLED,
-  // FETCH_USERS_FAILED
-} from '../constants/users';
+  FETCH_ADMINS_PENDING,
+  FETCH_ADMINS_FULFILLED,
+  // FETCH_ADMINS_FAILED
+} from '../constants/admins';
 
 import {
   merge,
@@ -16,13 +16,13 @@ const defaultState = () => ({
   list: [],
 });
 
-const users = (state = defaultState(), action = {}) => {
+const admins = (state = defaultState(), action = {}) => {
   switch (action.type) {
-    case FETCH_USERS_PENDING:
+    case FETCH_ADMINS_PENDING:
       // Set isFetching as true
       return isFetching(state);
 
-    case FETCH_USERS_FULFILLED:
+    case FETCH_ADMINS_FULFILLED:
       return compose(
         // Merge payload to state
         merge({ list: action.payload }),
@@ -35,7 +35,7 @@ const users = (state = defaultState(), action = {}) => {
   }
 };
 
-export default users;
+export default admins;
 
 export const selectUsers = state =>
-  state.users.list;
+  state.admins.list;
