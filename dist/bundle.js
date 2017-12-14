@@ -827,6 +827,8 @@ var _reactRouterConfig = __webpack_require__(1);
 
 var _reactRedux = __webpack_require__(4);
 
+var _styledComponents = __webpack_require__(3);
+
 var _serializeJavascript = __webpack_require__(26);
 
 var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
@@ -842,7 +844,9 @@ exports.default = function (_ref) {
       store = _ref.store,
       context = _ref.context;
 
-  var content = (0, _server.renderToString)(_react2.default.createElement(
+  var sheet = new _styledComponents.ServerStyleSheet();
+
+  var content = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
     _react2.default.createElement(
@@ -854,11 +858,12 @@ exports.default = function (_ref) {
         (0, _reactRouterConfig.renderRoutes)(_Routes2.default)
       )
     )
-  ));
+  )));
+  var styleTags = sheet.getStyleTags();
 
   var initialState = (0, _serializeJavascript2.default)(store.getState());
 
-  return '\n    <html>\n      <head>\n        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />\n      </head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + initialState + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
+  return '\n    <html>\n      <head>\n        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />\n        ' + styleTags + '\n      </head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + initialState + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
 };
 
 /***/ }),
