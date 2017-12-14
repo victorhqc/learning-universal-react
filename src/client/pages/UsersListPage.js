@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import map from 'lodash/map';
 import fetchUsers from '../../store/actions/users';
 
@@ -19,9 +20,23 @@ class UsersListPage extends Component {
     ));
   }
 
+  renderHead() {
+    const {
+      users,
+    } = this.props;
+
+    return (
+      <Helmet>
+        <title>{`${users.list.length} Users Loaded`}</title>
+        <meta property="og:title" content="Users App" />
+      </Helmet>
+    );
+  }
+
   render() {
     return (
       <div>
+        {this.renderHead()}
         {'Here\'s a big list of users:'}
         <ul>{this.renderUsers()}</ul>
       </div>
