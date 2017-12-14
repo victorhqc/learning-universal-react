@@ -2,58 +2,58 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import map from 'lodash/map';
-import fetchUsers from '../../store/actions/users';
+import fetchAdmins from '../../store/actions/admins';
 
 class UsersListPage extends Component {
   componentDidMount() {
-    this.props.fetchUsers();
+    this.props.fetchAdmins();
   }
 
-  renderUsers() {
+  renderAdmins() {
     const {
-      users,
+      admins,
     } = this.props;
 
-    return map(users.list, user => (
-      <li key={user.id}>{user.name}</li>
+    return map(admins.list, admin => (
+      <li key={admin.id}>{admin.name}</li>
     ));
   }
 
   render() {
     return (
       <div>
-        {'Here\'s a big list of users:'}
-        <ul>{this.renderUsers()}</ul>
+        <h3>Protected list of admins</h3>
+        <ul>{this.renderAdmins()}</ul>
       </div>
     );
   }
 }
 
 UsersListPage.defaultProps = {
-  users: {
+  admins: {
     list: [],
   },
 };
 
 UsersListPage.propTypes = {
-  users: PropTypes.shape({
+  admins: PropTypes.shape({
     list: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
     })),
   }),
-  fetchUsers: PropTypes.func.isRequired,
+  fetchAdmins: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ users }) => ({
-  users,
+const mapStateToProps = ({ admins }) => ({
+  admins,
 });
 
 const mapDispatchToProps = {
-  fetchUsers,
+  fetchAdmins,
 };
 
-const loadData = ({ dispatch }) => dispatch(fetchUsers());
+const loadData = ({ dispatch }) => dispatch(fetchAdmins());
 
 export default {
   loadData,

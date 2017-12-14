@@ -37,5 +37,5 @@ const admins = (state = defaultState(), action = {}) => {
 
 export default admins;
 
-export const selectUsers = state =>
+export const selectAdmins = state =>
   state.admins.list;

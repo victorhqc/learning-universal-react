@@ -47165,6 +47165,10 @@ var _UsersListPage = __webpack_require__(700);
 
 var _UsersListPage2 = _interopRequireDefault(_UsersListPage);
 
+var _AdminsListPage = __webpack_require__(713);
+
+var _AdminsListPage2 = _interopRequireDefault(_AdminsListPage);
+
 var _NotFoundPage = __webpack_require__(710);
 
 var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
@@ -47177,6 +47181,8 @@ exports.default = [_extends({}, _App2.default, {
     exact: true
   }), _extends({}, _UsersListPage2.default, {
     path: '/users'
+  }), _extends({}, _AdminsListPage2.default, {
+    path: '/admins'
   }), _extends({}, _NotFoundPage2.default)]
 })];
 
@@ -49362,8 +49368,9 @@ var mapDispatchToProps = {
   fetchUsers: _users2.default
 };
 
-var loadData = function loadData(store) {
-  return store.dispatch((0, _users2.default)());
+var loadData = function loadData(_ref2) {
+  var dispatch = _ref2.dispatch;
+  return dispatch((0, _users2.default)());
 };
 
 exports.default = {
@@ -49614,7 +49621,7 @@ var fetchUsersPending = function fetchUsersPending() {
   };
 };
 
-var fetchusersFulfilled = function fetchusersFulfilled(data) {
+var fetchUsersFulfilled = function fetchUsersFulfilled(data) {
   return {
     type: _users.FETCH_USERS_FULFILLED,
     payload: data
@@ -49657,7 +49664,7 @@ var fetchUsers = function fetchUsers() {
               data = _ref2.data;
 
 
-              dispatch(fetchusersFulfilled(data));
+              dispatch(fetchUsersFulfilled(data));
 
             case 8:
             case 'end':
@@ -49733,7 +49740,7 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.selectUsers = undefined;
+exports.selectAdmins = undefined;
 
 var _compose = __webpack_require__(227);
 
@@ -49773,7 +49780,7 @@ var admins = function admins() {
 };
 
 exports.default = admins;
-var selectUsers = exports.selectUsers = function selectUsers(state) {
+var selectAdmins = exports.selectAdmins = function selectAdmins(state) {
   return state.admins.list;
 };
 
@@ -49790,6 +49797,217 @@ Object.defineProperty(exports, "__esModule", {
 var FETCH_ADMINS_PENDING = exports.FETCH_ADMINS_PENDING = 'FETCH_ADMINS_PENDING';
 var FETCH_ADMINS_FULFILLED = exports.FETCH_ADMINS_FULFILLED = 'FETCH_ADMINS_FULFILLED';
 var FETCH_ADMINS_FAILED = exports.FETCH_ADMINS_FAILED = 'FETCH_ADMINS_FAILED';
+
+/***/ }),
+/* 713 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(11);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(132);
+
+var _map = __webpack_require__(701);
+
+var _map2 = _interopRequireDefault(_map);
+
+var _admins = __webpack_require__(714);
+
+var _admins2 = _interopRequireDefault(_admins);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UsersListPage = function (_Component) {
+  _inherits(UsersListPage, _Component);
+
+  function UsersListPage() {
+    _classCallCheck(this, UsersListPage);
+
+    return _possibleConstructorReturn(this, (UsersListPage.__proto__ || Object.getPrototypeOf(UsersListPage)).apply(this, arguments));
+  }
+
+  _createClass(UsersListPage, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchAdmins();
+    }
+  }, {
+    key: 'renderAdmins',
+    value: function renderAdmins() {
+      var admins = this.props.admins;
+
+
+      return (0, _map2.default)(admins.list, function (admin) {
+        return _react2.default.createElement(
+          'li',
+          { key: admin.id },
+          admin.name
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Protected list of admins'
+        ),
+        _react2.default.createElement(
+          'ul',
+          null,
+          this.renderAdmins()
+        )
+      );
+    }
+  }]);
+
+  return UsersListPage;
+}(_react.Component);
+
+UsersListPage.defaultProps = {
+  admins: {
+    list: []
+  }
+};
+
+UsersListPage.propTypes = {
+  admins: _propTypes2.default.shape({
+    list: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+      id: _propTypes2.default.number,
+      name: _propTypes2.default.string
+    }))
+  }),
+  fetchAdmins: _propTypes2.default.func.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(_ref) {
+  var admins = _ref.admins;
+  return {
+    admins: admins
+  };
+};
+
+var mapDispatchToProps = {
+  fetchAdmins: _admins2.default
+};
+
+var loadData = function loadData(_ref2) {
+  var dispatch = _ref2.dispatch;
+  return dispatch((0, _admins2.default)());
+};
+
+exports.default = {
+  loadData: loadData,
+  component: (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersListPage)
+};
+
+/***/ }),
+/* 714 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _admins = __webpack_require__(712);
+
+var _admins2 = __webpack_require__(711);
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var fetchAdminsPending = function fetchAdminsPending() {
+  return {
+    type: _admins.FETCH_ADMINS_PENDING
+  };
+};
+
+var fetchAdminsFulfilled = function fetchAdminsFulfilled(data) {
+  return {
+    type: _admins.FETCH_ADMINS_FULFILLED,
+    payload: data
+  };
+};
+
+var isFetchRequired = function isFetchRequired(state, force) {
+  if (force) {
+    return true;
+  }
+
+  return (0, _admins2.selectAdmins)(state).length <= 0;
+};
+
+var fetchAdmins = function fetchAdmins() {
+  var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  return function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState, api) {
+      var _ref2, data;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (isFetchRequired(getState(), force)) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt('return');
+
+            case 2:
+
+              dispatch(fetchAdminsPending());
+              _context.next = 5;
+              return api.get('/admins');
+
+            case 5:
+              _ref2 = _context.sent;
+              data = _ref2.data;
+
+
+              dispatch(fetchAdminsFulfilled(data));
+
+            case 8:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    }));
+
+    return function (_x2, _x3, _x4) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+};
+
+exports.default = fetchAdmins;
 
 /***/ })
 /******/ ]);

@@ -6,13 +6,13 @@ import {
 
 import {
   selectAdmins,
-} from '../reducers/users';
+} from '../reducers/admins';
 
 const fetchAdminsPending = () => ({
   type: FETCH_ADMINS_PENDING,
 });
 
-const fetchusersFulfilled = data => ({
+const fetchAdminsFulfilled = data => ({
   type: FETCH_ADMINS_FULFILLED,
   payload: data,
 });
@@ -33,7 +33,7 @@ const fetchAdmins = (force = false) => async (dispatch, getState, api) => {
   dispatch(fetchAdminsPending());
   const { data } = await api.get('/admins');
 
-  dispatch(fetchusersFulfilled(data));
+  dispatch(fetchAdminsFulfilled(data));
 };
 
 export default fetchAdmins;

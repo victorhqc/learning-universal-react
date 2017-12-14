@@ -12,7 +12,7 @@ const fetchUsersPending = () => ({
   type: FETCH_USERS_PENDING,
 });
 
-const fetchusersFulfilled = data => ({
+const fetchUsersFulfilled = data => ({
   type: FETCH_USERS_FULFILLED,
   payload: data,
 });
@@ -33,7 +33,7 @@ const fetchUsers = (force = false) => async (dispatch, getState, api) => {
   dispatch(fetchUsersPending());
   const { data } = await api.get('/users');
 
-  dispatch(fetchusersFulfilled(data));
+  dispatch(fetchUsersFulfilled(data));
 };
 
 export default fetchUsers;
